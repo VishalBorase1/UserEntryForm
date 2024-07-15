@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Entries</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>User Entries </h1>
+        <form action="/submit" method="post" id="entryForm">
+            <label for="name">User Name:</label>
+            <input type="text" id="name" name="name"><br><br>
+            <label for="entry">User Entry:</label>
+            <textarea id="entry" name="entry"></textarea><br><br>
+            <button type="submit">Submit</button>
+        </form>
+        <h2>Submitted Entries</h2>
+        <ul id="entriesList">
+            <li th:each="entry : ${entries}">
+                <strong th:text="${entry.name}"></strong>: <span th:text="${entry.entry}"></span>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById('entryForm');
+            const entriesList = document.getElementById('entriesList');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const name = document.getElementById('name').value;
+                const entry = document.getElementById('entry').value;
+
+                if (name && entry) {
+                    const li = document.createElement('li');
+                    const strong = document.createElement('strong');
+                    strong.textContent = name;
+                    const span = document.createElement('span');
+                    span.textContent = `: ${entry}`;
+                    li.appendChild(strong);
+                    li.appendChild(span);
+                    entriesList.appendChild(li);
+
+                    // Clear the form
+                    form.reset();
+                } else {
+                    alert('Please fill out both fields.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
